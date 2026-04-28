@@ -252,11 +252,22 @@ export default function Admin() {
         <div className="bg-white p-6 rounded-2xl border shadow-sm">
           <h3 className="font-semibold mb-3">Upload CSV</h3>
 
+          {/* Hidden file input */}
           <input
             type="file"
             accept=".csv"
             onChange={handleCSVUpload}
+            className="hidden"
+            id="csvUpload"
           />
+
+          {/* Styled button */}
+          <label
+            htmlFor="csvUpload"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer"
+          >
+            Choose CSV File
+          </label>
 
           {uploading && (
             <p className="text-sm text-gray-500 mt-2">
