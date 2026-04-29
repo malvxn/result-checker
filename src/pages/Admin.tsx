@@ -13,6 +13,7 @@ type Result = {
 
 export default function Admin() {
   const [studentId, setStudentId] = useState('');
+  const [searchId, setSearchId] = useState('');
   const [subject, setSubject] = useState('');
   const [score, setScore] = useState('');
   const [grade, setGrade] = useState('');
@@ -22,17 +23,6 @@ export default function Admin() {
 
   const navigate = useNavigate();
 
-  const fetchResults = async () => {
-    const { data, error } = await supabase.from('results').select('*');
-
-    if (error) {
-      console.error('Error fetching results:', error);
-      return;
-    }
-
-    setResults(data || []);
-  };
-
   useEffect(() => {
     const isAdmin = localStorage.getItem('admin');
 
@@ -40,14 +30,50 @@ export default function Admin() {
       navigate('/admin-login');
       return;
     }
-
-    fetchResults();
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('admin');
     navigate('/admin-login');
   };
+
+  const fetchResults = async () => {
+    if (!searchId) {
+      setResults([]);
+      return;
+    }
+
+    const { data: studentData } = await supabase
+      .from('students')
+      .select('id')
+      .eq('student_id', searchId.trim())
+      .limit(1);
+
+    const student = studentData?.[0];
+
+    if (!student) {
+      setResults([]);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('results')
+      .select('*')
+      .eq('student_id', student.id);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setResults(data || []);
+  };
+
+  useEffect(() => {
+    if (searchId) {
+      fetchResults();
+    }
+  }, [searchId]);
 
   const handleAddResult = async () => {
     if (!studentId || !subject || !score || !grade) {
@@ -124,11 +150,16 @@ export default function Admin() {
 
   const handleUpdate = async (id: string) => {
     const newScore = prompt('Enter new score:');
-    if (!newScore) return;
+    const newGrade = prompt('Enter new grade:');
+
+    if (!newScore || !newGrade) return;
 
     const { error } = await supabase
       .from('results')
-      .update({ score: Number(newScore) })
+      .update({
+        score: Number(newScore),
+        grade: newGrade,
+      })
       .eq('id', id);
 
     if (error) {
@@ -252,7 +283,6 @@ export default function Admin() {
         <div className="bg-white p-6 rounded-2xl border shadow-sm">
           <h3 className="font-semibold mb-3">Upload CSV</h3>
 
-          {/* Hidden file input */}
           <input
             type="file"
             accept=".csv"
@@ -261,7 +291,6 @@ export default function Admin() {
             id="csvUpload"
           />
 
-          {/* Styled button */}
           <label
             htmlFor="csvUpload"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer"
@@ -276,13 +305,21 @@ export default function Admin() {
           )}
         </div>
 
-        {/* Results List */}
+        {/* Results */}
         <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-semibold mb-4">All Results</h3>
+          <h3 className="font-semibold mb-4">Student Results</h3>
+
+          <input
+            type="text"
+            placeholder="Enter Student ID to view results"
+            className="w-full mb-3 p-3 border rounded-lg"
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}
+          />
 
           {results.length === 0 ? (
             <p className="text-sm text-gray-500">
-              No results yet
+              No results found
             </p>
           ) : (
             <div className="space-y-2">
