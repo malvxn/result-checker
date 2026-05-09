@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  // DEMO ADMIN CREDENTIALS
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('1234');
 
   const navigate = useNavigate();
 
   const handleLogin = () => {
+
     if (username === 'admin' && password === '1234') {
       localStorage.setItem('admin', 'true');
       navigate('/admin');
@@ -41,6 +44,15 @@ export default function AdminLogin() {
         {/* CARD */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 p-8">
 
+          {/* DEMO BADGE */}
+          <div className="mb-6">
+
+            <div className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1">
+              Demo Credentials Pre-filled
+            </div>
+
+          </div>
+
           <div className="space-y-5">
 
             <div>
@@ -50,9 +62,13 @@ export default function AdminLogin() {
 
               <input
                 type="text"
-                placeholder="Enter username"
+                placeholder="admin"
                 value={username}
+                autoComplete="off"
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={(e) =>
+                  e.key === 'Enter' && handleLogin()
+                }
                 className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition"
               />
             </div>
@@ -64,9 +80,13 @@ export default function AdminLogin() {
 
               <input
                 type="password"
-                placeholder="Enter password"
+                placeholder="1234"
                 value={password}
+                autoComplete="off"
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) =>
+                  e.key === 'Enter' && handleLogin()
+                }
                 className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition"
               />
             </div>
@@ -83,7 +103,11 @@ export default function AdminLogin() {
           <div className="mt-6 pt-6 border-t border-slate-100">
 
             <p className="text-sm text-center text-slate-500">
-              Authorized school staff only
+              Demo admin access for portfolio presentation
+            </p>
+
+            <p className="text-sm text-center font-medium text-blue-600 mt-1">
+              Use the pre-filled credentials to continue
             </p>
 
           </div>

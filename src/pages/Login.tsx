@@ -3,13 +3,17 @@ import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const [studentId, setStudentId] = useState('');
-  const [pin, setPin] = useState('');
+
+  // DEMO LOGIN DETAILS
+  const [studentId, setStudentId] = useState('ST001');
+  const [pin, setPin] = useState('1234');
+
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+
     if (!studentId || !pin) {
       alert('Enter Student ID and PIN');
       return;
@@ -108,9 +112,15 @@ export default function Login() {
           <div className="bg-white rounded-3xl border border-gray-200 shadow-xl shadow-gray-200/40 p-8">
 
             <div className="mb-8">
+
+              <div className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 mb-4">
+                Demo Credentials Pre-filled
+              </div>
+
               <p className="text-gray-500 mt-2 text-lg">
                 Login to access your academic results
               </p>
+
             </div>
 
             {/* Inputs */}
@@ -123,8 +133,9 @@ export default function Login() {
 
                 <input
                   type="text"
-                  placeholder="Enter your student ID"
+                  placeholder="ST001"
                   value={studentId}
+                  autoComplete="off"
                   onChange={(e) => setStudentId(e.target.value)}
                   onKeyDown={(e) =>
                     e.key === 'Enter' && handleLogin()
@@ -140,8 +151,9 @@ export default function Login() {
 
                 <input
                   type="password"
-                  placeholder="Enter your PIN"
+                  placeholder="1234"
                   value={pin}
+                  autoComplete="off"
                   onChange={(e) => setPin(e.target.value)}
                   onKeyDown={(e) =>
                     e.key === 'Enter' && handleLogin()
@@ -164,11 +176,11 @@ export default function Login() {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500">
-                Need help accessing your portal?
+                Demo portal for portfolio presentation
               </p>
 
               <p className="text-sm font-medium text-blue-600 mt-1">
-                Contact the school administrator
+                Use the pre-filled credentials to continue
               </p>
             </div>
 
