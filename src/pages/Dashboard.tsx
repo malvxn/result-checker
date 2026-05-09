@@ -86,12 +86,7 @@ export default function Dashboard() {
 
           <div className="flex items-center gap-3">
 
-            <button
-              onClick={() => window.print()}
-              className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition"
-            >
-              Print Result
-            </button>
+            
 
             <button
               onClick={handleLogout}
@@ -253,9 +248,13 @@ export default function Dashboard() {
 
             </div>
           )}
-
+            <button
+              onClick={() => window.print()}
+              className="h-10 px-4 mb-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition block mx-auto"
+            >
+              Print Result
+            </button>
         </div>
-
       </div>
 
     </div>
