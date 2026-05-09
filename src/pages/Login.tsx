@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 
 export default function Login() {
-  const [studentId, setStudentId] = useState<string>('');
-  const [pin, setPin] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [studentId, setStudentId] = useState('');
+  const [pin, setPin] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,59 +44,140 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header />
+    <div className="min-h-screen bg-slate-100 flex">
 
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="w-full max-w-sm">
+      {/* LEFT SIDE */}
+      <div className="hidden lg:flex w-1/2 bg-blue-700 text-white p-12 flex-col justify-between">
 
-          {/* Card */}
-          <div className="bg-white rounded-2xl shadow-sm border p-6">
+        <div>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl font-bold">
+              S
+            </div>
 
-            {/* Title */}
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold">Student Login</h1>
-              
+            <div>
+              <h1 className="text-2xl font-bold">
+                School Academy
+              </h1>
+
+              <p className="text-blue-100 text-sm">
+                Student Result Portal
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 max-w-md">
+            <h2 className="text-4xl font-bold leading-tight">
+              Digital Result Management For Modern Schools
+            </h2>
+
+            <p className="mt-5 text-blue-100 leading-7">
+              Students can securely access their academic
+              records online while administrators manage
+              results efficiently from a centralized portal.
+            </p>
+          </div>
+        </div>
+
+        <div className="text-sm text-blue-100">
+          © 2026 School Academy
+        </div>
+      </div>
+
+      {/* RIGHT SIDE */}
+      <div className="flex-1 flex items-center justify-center px-6 py-10">
+
+        <div className="w-full max-w-md">
+
+          {/* Mobile Branding */}
+          <div className="lg:hidden text-center mb-8">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl font-bold">
+              S
+            </div>
+
+            <h1 className="mt-4 text-2xl font-bold text-gray-900">
+              School Academy
+            </h1>
+
+            <p className="text-sm text-gray-500">
+              Student Result Portal
+            </p>
+          </div>
+
+          {/* LOGIN CARD */}
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-xl shadow-gray-200/40 p-8">
+
+            <div className="mb-8">
+              <p className="text-gray-500 mt-2 text-lg">
+                Login to access your academic results
+              </p>
             </div>
 
             {/* Inputs */}
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Student ID"
-                className="w-full p-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-              />
+            <div className="space-y-5">
 
-              <input
-                type="password"
-                placeholder="PIN"
-                className="w-full p-3 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Student ID
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Enter your student ID"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && handleLogin()
+                  }
+                  className="w-full h-12 px-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  PIN
+                </label>
+
+                <input
+                  type="password"
+                  placeholder="Enter your PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && handleLogin()
+                  }
+                  className="w-full h-12 px-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition"
+                />
+              </div>
+
             </div>
 
             {/* Button */}
             <button
               onClick={handleLogin}
               disabled={loading}
-              className="w-full mt-5 bg-blue-600 hover:bg-blue-700 transition text-white p-3 rounded-lg text-sm font-medium disabled:opacity-50"
+              className="w-full h-12 mt-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition disabled:opacity-50"
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'Logging in...' : 'Login to Portal'}
             </button>
 
             {/* Footer */}
-            <p className="text-xs text-gray-400 text-center mt-4">
-              Contact school admin if you cannot log in
-            </p>
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500">
+                Need help accessing your portal?
+              </p>
+
+              <p className="text-sm font-medium text-blue-600 mt-1">
+                Contact the school administrator
+              </p>
+            </div>
+
           </div>
 
         </div>
+
       </div>
+
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Papa from 'papaparse';
-import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 
 type Result = {
@@ -217,146 +216,295 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header title="Admin Panel" />
+    <div className="min-h-screen bg-slate-50">
 
-      <div className="p-4 max-w-3xl mx-auto space-y-4">
+      {/* TOP BAR */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
-        {/* Logout */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleLogout}
-            className="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
-          >
-            Logout
-          </button>
-        </div>
+          <div>
+            <h1 className="font-bold text-slate-900">
+              School Academy
+            </h1>
 
-        {/* Add Result */}
-        <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-semibold mb-4">Add Result</h3>
-
-          <div className="space-y-3">
-            <input
-              type="text"
-              placeholder="Student ID"
-              className="w-full p-3 border rounded-lg"
-              value={studentId}
-              onChange={(e) => setStudentId(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Subject"
-              className="w-full p-3 border rounded-lg"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-
-            <input
-              type="number"
-              placeholder="Score"
-              className="w-full p-3 border rounded-lg"
-              value={score}
-              onChange={(e) => setScore(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Grade"
-              className="w-full p-3 border rounded-lg"
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-            />
+            <p className="text-sm text-slate-500">
+              School Management Portal
+            </p>
           </div>
 
-          <button
-            onClick={handleAddResult}
-            disabled={loading}
-            className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg disabled:opacity-50"
-          >
-            {loading ? 'Saving...' : 'Add Result'}
-          </button>
-        </div>
+          <div className="flex items-center gap-3">
 
-        {/* CSV Upload */}
-        <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-semibold mb-3">Upload CSV</h3>
+            <div className="hidden md:block text-right">
+              <p className="text-sm font-medium text-slate-800">
+                Administrator
+              </p>
 
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleCSVUpload}
-            className="hidden"
-            id="csvUpload"
-          />
-
-          <label
-            htmlFor="csvUpload"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm cursor-pointer"
-          >
-            Choose CSV File
-          </label>
-
-          {uploading && (
-            <p className="text-sm text-gray-500 mt-2">
-              Uploading...
-            </p>
-          )}
-        </div>
-
-        {/* Results */}
-        <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-semibold mb-4">Student Results</h3>
-
-          <input
-            type="text"
-            placeholder="Enter Student ID to view results"
-            className="w-full mb-3 p-3 border rounded-lg"
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-          />
-
-          {results.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              No results found
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {results.map((r) => (
-                <div
-                  key={r.id}
-                  className="border p-3 rounded-lg flex justify-between items-center"
-                >
-                  <div>
-                    <p className="font-medium">{r.subject}</p>
-                    <p className="text-sm text-gray-500">
-                      {r.score} ({r.grade})
-                    </p>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleUpdate(r.id)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-sm rounded-lg"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(r.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 text-sm rounded-lg"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <p className="text-xs text-slate-500">
+                System Access
+              </p>
             </div>
-          )}
+
+            <button
+              onClick={handleLogout}
+              className="h-10 px-4 rounded-xl border border-slate-300 hover:bg-slate-100 text-sm font-medium transition"
+            >
+              Logout
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto p-4 lg:p-8">
+
+        {/* PAGE HEADER */}
+        <div className="mb-8">
+
+          <p className="text-sm font-medium text-blue-600">
+            Administration Dashboard
+          </p>
+
+          <p className="mt-2 text-slate-500">
+            Manage student academic records and uploads
+          </p>
+
+        </div>
+
+        {/* STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p className="text-sm text-slate-500">
+              Results Loaded
+            </p>
+
+            <h3 className="mt-2 text-3xl font-bold text-slate-900">
+              {results.length}
+            </h3>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p className="text-sm text-slate-500">
+              Upload Status
+            </p>
+
+            <h3 className="mt-2 text-lg font-semibold text-green-600">
+              System Active
+            </h3>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <p className="text-sm text-slate-500">
+              Current Session
+            </p>
+
+            <h3 className="mt-2 text-lg font-semibold text-slate-900">
+              2024/2025
+            </h3>
+          </div>
+
+        </div>
+
+        {/* MAIN GRID */}
+        <div className="grid lg:grid-cols-3 gap-6">
+
+          {/* LEFT SIDE */}
+          <div className="lg:col-span-1 space-y-6">
+
+            {/* ADD RESULT */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+
+              <div className="mb-5">
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Add Result
+                </h3>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  Create a new student result entry
+                </p>
+              </div>
+
+              <div className="space-y-4">
+
+                <input
+                  type="text"
+                  placeholder="Student ID"
+                  className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                />
+
+                <div className="grid grid-cols-2 gap-3">
+
+                  <input
+                    type="number"
+                    placeholder="Score"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"
+                    value={score}
+                    onChange={(e) => setScore(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Grade"
+                    className="w-full h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"
+                    value={grade}
+                    onChange={(e) => setGrade(e.target.value)}
+                  />
+
+                </div>
+
+                <button
+                  onClick={handleAddResult}
+                  disabled={loading}
+                  className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition disabled:opacity-50"
+                >
+                  {loading ? 'Saving...' : 'Save Result'}
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* CSV */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+
+              <div className="mb-5">
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Bulk Upload
+                </h3>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  Upload student results using CSV
+                </p>
+              </div>
+
+              <input
+                type="file"
+                accept=".csv"
+                onChange={handleCSVUpload}
+                className="hidden"
+                id="csvUpload"
+              />
+
+              <label
+                htmlFor="csvUpload"
+                className="flex items-center justify-center h-12 rounded-xl bg-slate-900 hover:bg-black text-white text-sm font-medium cursor-pointer transition"
+              >
+                Choose CSV File
+              </label>
+
+              {uploading && (
+                <p className="text-sm text-slate-500 mt-3">
+                  Uploading results...
+                </p>
+              )}
+
+            </div>
+
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="lg:col-span-2">
+
+            <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+
+              {/* HEADER */}
+              <div className="p-6 border-b border-slate-200">
+
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Student Results
+                </h3>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  Search and manage student records
+                </p>
+
+                <input
+                  type="text"
+                  placeholder="Search by Student ID"
+                  className="w-full mt-4 h-12 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"
+                  value={searchId}
+                  onChange={(e) => setSearchId(e.target.value)}
+                />
+
+              </div>
+
+              {/* RESULTS */}
+              <div className="p-6">
+
+                {results.length === 0 ? (
+                  <div className="text-center py-10">
+
+                    <p className="text-slate-500">
+                      No results found
+                    </p>
+
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+
+                    {results.map((r) => (
+                      <div
+                        key={r.id}
+                        className="border border-slate-200 rounded-2xl p-4 flex items-center justify-between hover:bg-slate-50 transition"
+                      >
+
+                        <div>
+
+                          <p className="font-semibold text-slate-900">
+                            {r.subject}
+                          </p>
+
+                          <p className="text-sm text-slate-500 mt-1">
+                            Score: {r.score} • Grade: {r.grade}
+                          </p>
+
+                        </div>
+
+                        <div className="flex items-center gap-2">
+
+                          <button
+                            onClick={() => handleUpdate(r.id)}
+                            className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition"
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            onClick={() => handleDelete(r.id)}
+                            className="h-10 px-4 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium transition"
+                          >
+                            Delete
+                          </button>
+
+                        </div>
+
+                      </div>
+                    ))}
+
+                  </div>
+                )}
+
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
 
       </div>
+
     </div>
   );
 }
